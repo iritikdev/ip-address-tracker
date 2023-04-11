@@ -43,10 +43,8 @@ function App() {
             zoom={13}
             scrollWheelZoom={false}
             style={{
-              height: "100vh",
+              height: "62vh",
               width: "100wh",
-              zIndex: "-10",
-              isolation: "isolate",
             }}
           >
             <TileLayer
