@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { iconArrow } from "./assets";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
@@ -7,6 +7,17 @@ function App() {
     position: [51.505, -0.091],
     zoom: 13,
   });
+  const [ipInfo, setIpInfo] = useState(null);
+  useEffect(() => {
+    fetch(
+      "https://geo.ipify.org/api/v2/country?apiKey=at_OhmKAlyr8cFia29bD95EmxvEA9qQF&ipAddress=8.8.8.8"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setIpInfo(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <>
       <div className="container">
@@ -21,19 +32,21 @@ function App() {
           <div className="card">
             <div className="ip-address">
               <div className="title">ip address</div>
-              <div className="subtitle">192.168.32.12</div>
+              <div className="subtitle">{ipInfo?.ip}</div>
             </div>
             <div className="location">
               <div className="title">location</div>
-              <div className="subtitle">Brooklyn, NY 10001</div>
+              <div className="subtitle">
+                {ipInfo?.location.region}, {ipInfo?.location.country}
+              </div>
             </div>
             <div className="timezone">
               <div className="title">timezone</div>
-              <div className="subtitle">UTC-5:00</div>
+              <div className="subtitle">UTC{ipInfo?.location.timezone}</div>
             </div>
             <div className="isp">
               <div className="title">ISP</div>
-              <div className="subtitle">SpaceX Starlink</div>
+              <div className="subtitle">{ipInfo?.isp}</div>
             </div>
           </div>
         </div>
