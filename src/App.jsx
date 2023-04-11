@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { iconArrow } from "./assets";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Card from "./components/Card";
+
+const API_KEY = "at_OhmKAlyr8cFia29bD95EmxvEA9qQF";
 
 function App() {
   const [mapInitialValues, setMapInitialValues] = useState({
     position: [51.505, -0.091],
     zoom: 13,
   });
+  const [ipAddress, setIpAddress] = useState("8.8.8.8");
   const [ipInfo, setIpInfo] = useState(null);
   useEffect(() => {
     fetch(
-      "https://geo.ipify.org/api/v2/country?apiKey=at_OhmKAlyr8cFia29bD95EmxvEA9qQF&ipAddress=8.8.8.8"
+      `https://geo.ipify.org/api/v2/country?apiKey=${API_KEY}&ipAddress=${ipAddress}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -29,26 +33,13 @@ function App() {
               <img src={iconArrow} alt="search" />
             </button>
           </div>
-          <div className="card">
-            <div className="ip-address">
-              <div className="title">ip address</div>
-              <div className="subtitle">{ipInfo?.ip}</div>
-            </div>
-            <div className="location">
-              <div className="title">location</div>
-              <div className="subtitle">
-                {ipInfo?.location.region}, {ipInfo?.location.country}
-              </div>
-            </div>
-            <div className="timezone">
-              <div className="title">timezone</div>
-              <div className="subtitle">UTC{ipInfo?.location.timezone}</div>
-            </div>
-            <div className="isp">
-              <div className="title">ISP</div>
-              <div className="subtitle">{ipInfo?.isp}</div>
-            </div>
-          </div>
+          <Card
+            ip={ipInfo?.ip}
+            timezone={ipInfo?.location.timezone}
+            region={ipInfo?.location.region}
+            country={ipInfo?.location.country}
+            isp={ipInfo?.isp}
+          />
         </div>
         <div className="map-box">
           <MapContainer
